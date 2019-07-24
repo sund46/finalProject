@@ -3,29 +3,45 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>    
-<!DOCTYPE html> 
-<html lang="en"> 
-<head> 
-<meta charset="UTF-8"> 
-<title>Summernote</title> 
-<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet"> 
-<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script> 
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script> 
-<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.1/summernote.css" rel="stylesheet"> 
-<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.1/summernote.js"></script> 
-<script src="${pageContext.request.contextPath }/resources/js/summernote-ko-KR.js"></script>
-</head> 
-<body> 
-<div id="summernote">
-<p>Hello Summernote</p>
-</div> 
-<script> 
-	$(document).ready(function() { 
-		$('#summernote').summernote({
-			lang: 'ko-KR'
-		}); 
-		
-	}); 
-</script> 
-</body> 
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!-- 합쳐지고 최소화된 최신 CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+<!-- 부가적인 테마 -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+<!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+</head>
+<body>
+	<div style="height:100%">
+		<div class="container" style="width:100%; height:100%; padding:none;">
+			<div class="note-Editor" style="width:100%; height:100%; padding:0 15px;">
+				<div class="Editor-Title" style="width:100%">
+					<div class="Editor" style="width:100%; height:10%; border:1px solid red">
+						
+					</div>
+					<div class="Title" style="width:100%;border:1px solid blue">
+						<input type="text" placeholder="제목 없음" style="font-size:30px;width:100%; height:70px" />
+					</div>
+				</div>
+				<div>
+					<iframe src="https://www.evernote.com//IonCe.action?1563941260723" height="787px"></iframe>
+					<!-- <div id="text" contenteditable="true" style="width:100%;">텍스트 편집기</div> -->
+					
+				</div>
+				
+			</div>			
+		</div>
+	</div>
+	
+	
+	
+</body>
 </html>

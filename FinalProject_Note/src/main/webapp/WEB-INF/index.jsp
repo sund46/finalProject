@@ -15,7 +15,8 @@
 		<li><a href="${pageContext.request.contextPath }/template.do">템플릿 예제 1</a></li>
 		<li><a href="${pageContext.request.contextPath }/template2.do">템플릿 예제 2</a></li>
 		<li><a href="${pageContext.request.contextPath }/template3.do">템플릿 예제 3</a></li>
-		<li><a href="${pageContext.request.contextPath }/template4.do">템플릿 만들기</a></li>
+		<li><a href="${pageContext.request.contextPath }/template4.do">썸머노트</a></li>
+		<li><a href="${pageContext.request.contextPath }/template5.do">템플릿 만들기</a></li>
 	</ul>
 	
 	

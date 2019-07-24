@@ -23,6 +23,11 @@ public class NoteController {
 	
 	@RequestMapping("/template4.do")
 	public String template4() {
+		return "summernote";
+	}
+	
+	@RequestMapping("/template5.do")
+	public String template5() {
 		return "finalTemplate";
 	}
 	

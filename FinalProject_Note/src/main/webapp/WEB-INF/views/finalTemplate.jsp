@@ -24,8 +24,19 @@
 		<div class="container" style="width:100%; height:100%; padding:none;">
 			<div class="note-Editor" style="width:100%; height:100%; padding:0 15px;">
 				<div class="Editor-Title" style="width:100%;height:15%">
-					<div class="Editor" style="width:100%; height:10%; border:1px solid red">
+					<div class="Editor" style="width:100%; border:1px solid red">
+						<div class="btn tableview" onclick="addTable()" style="cursor:pointer;">표만들기</div>
+						<div>
+							
+							
 						
+						
+						</div>
+					
+					
+					
+					
+					
 					</div>
 					<div class="Title" style="width:100%;border:1px solid blue">
 						<input type="text" placeholder="제목 없음" style="font-size:30px;width:100%; height:70px" />

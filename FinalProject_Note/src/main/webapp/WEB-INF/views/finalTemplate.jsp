@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>    
 <!DOCTYPE html>
-<html>
+<html style="height:100%">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -19,11 +19,11 @@
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 
 </head>
-<body>
+<body style="height:100%">
 	<div style="height:100%">
 		<div class="container" style="width:100%; height:100%; padding:none;">
 			<div class="note-Editor" style="width:100%; height:100%; padding:0 15px;">
-				<div class="Editor-Title" style="width:100%">
+				<div class="Editor-Title" style="width:100%;height:15%">
 					<div class="Editor" style="width:100%; height:10%; border:1px solid red">
 						
 					</div>
@@ -31,12 +31,10 @@
 						<input type="text" placeholder="제목 없음" style="font-size:30px;width:100%; height:70px" />
 					</div>
 				</div>
-				<div>
-					<iframe src="https://www.evernote.com//IonCe.action?1563941260723" height="787px"></iframe>
-					<!-- <div id="text" contenteditable="true" style="width:100%;">텍스트 편집기</div> -->
-					
+				<div style="overflow:auto;height:85%;border:1px solid black">	
+					<div id="text" contenteditable="true" style="width:100%;height:100%">텍스트 편집기</div>				
 				</div>
-				
+
 			</div>			
 		</div>
 	</div>

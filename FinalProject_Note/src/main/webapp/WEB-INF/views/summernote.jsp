@@ -11,21 +11,30 @@
 <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet"> 
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script> 
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script> 
-<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.1/summernote.css" rel="stylesheet"> 
-<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.1/summernote.js"></script> 
-<script src="${pageContext.request.contextPath }/resources/js/summernote-ko-KR.js"></script>
+<!-- include summernote css/js -->
+<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.css" rel="stylesheet">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.js"></script> 
+<script src="./resources/js/summernote-ko-KR.js"></script>
+<script src="./resources/js/summernote-table-styles.js"></script>
 </head> 
 <body> 
-<div id="summernote">
-<p>Hello Summernote</p>
-</div> 
+<div id="summernote"></div> 
 <script> 
-	$(document).ready(function() { 
-		$('#summernote').summernote({
-			lang: 'ko-KR'
-		}); 
-		
-	}); 
+
+	$(document).ready(function() {
+		  $('#summernote').summernote({
+			  lang: 'ko-KR',
+		      popover: {
+		      table: [
+		        ['add', ['addRowDown', 'addRowUp', 'addColLeft', 'addColRight']],
+		        ['delete', ['deleteRow', 'deleteCol', 'deleteTable']],
+		        ['custom', ['tableStyles']]
+		      ],
+		    },
+		  });
+		});
+	
+	
 </script> 
 </body> 
 </html>

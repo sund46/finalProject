@@ -17,12 +17,17 @@
 <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="//cdn.ckeditor.com/4.12.1/full/ckeditor.js"></script>
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js"></script>
+  <script>tinymce.init({selector:'textarea'});</script>
 <style>
 	.tablebutton{
 		background:lightblue;
 	}
 	.setTable{
 		position:absolute;
+		padding:5px;
+		margin-top:3px;
 	}
 </style>
 </head>
@@ -33,12 +38,16 @@
 				<div class="Editor-Title" style="width:100%;">
 					<div class="Editor" style="width:100%; border:1px solid red">
 						<div class="btn tablebutton" onclick="addTable()" style="cursor:pointer;">표만들기</div>
-						<div class="setTable" style="width:150px;height:170px; border:1px solid #000; background:#fff">
-							<div style="height:150px  ;border-bottom:1px solid red">
-								<div></div>
-								<div></div>
+						<div class="setTable" style="border:1px solid #000; background:#fff">
+							<div style="border-bottom:1px solid red; ">
+								<div style="">
+								</div>
+								<div>
+								</div>
+								
 							</div>
 							<div style="height:20px">
+							2 X 2
 							</div>
 						</div>
 					</div>
@@ -47,7 +56,10 @@
 					</div>
 				</div>
 				<div style="overflow:auto;height:85%;border:1px solid black">	
-					<div id="text" contenteditable="true" style="width:100%;height:100%">텍스트 편집기</div>				
+					<textarea name="editor1"></textarea>
+	                <script>
+	                        CKEDITOR.replace( 'editor1' );
+	                </script>
 				</div>
 
 			</div>			
@@ -58,3 +70,17 @@
 	
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

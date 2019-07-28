@@ -61,6 +61,7 @@
         delRow: '행 지우기',
         delCol: '열 지우기',
         delTable: '표 삭제',
+        Backgroundcolor: '배경색',
       },
       hr: {
         insert: '구분선 삽입',

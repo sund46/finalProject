@@ -16,17 +16,13 @@
   $.extend(true, $.summernote.lang, {
     "en-US": {
       tableStyles: {
-        tooltip: "배경색",
-        stylesExclusive: ["Basic", "Bordered", "background"],
-        stylesInclusive: ["Striped", "Condensed", "Hoverable"]
+        tooltip: "배경색"
       }
     }
   });
   $.extend($.summernote.options, {
     tableStyles: {
-      // Must keep the same order as in lang.tableStyles.styles*
-      stylesExclusive: ["", "table-bordered", "background"],
-      stylesInclusive: ["table-striped", "table-condensed", "table-hover"]
+      
     }
   });
 
@@ -42,7 +38,7 @@
       editable = $editable[0];
 
       context.memo("button.tableStyles", function() {
-        var button = ui.buttonGroup([
+        /*var button = ui.buttonGroup([
           ui.button({
             className: "dropdown-toggle",
             contents: ui.dropdownButtonContents(
@@ -52,11 +48,6 @@
             tooltip: lang.tableStyles.tooltip,
             data: {
               toggle: "dropdown"
-            },
-            callback: function($dropdownBtn) {
-              $dropdownBtn.click(function() {
-                self.updateTableMenuState($dropdownBtn);
-              });
             }
           }),
           ui.dropdownCheck({
@@ -76,117 +67,167 @@
               });
             }
           })
-        ]);
-        return button.render();
+        ]);*/
+        return self.colorPalette('note-color-all', lang.color.background, true, true);
       });
 
-      self.updateTableStyles = function(chosenItem) {
-        const rng = context.invoke("createRange", $editable);
-        const dom = $.summernote.dom;
-        if (rng.isCollapsed() && rng.isOnCell()) {
-          context.invoke("beforeCommand");
-          var table = dom.ancestor(rng.commonAncestor(), dom.isTable);
-          self.updateStyles(
-            $(table),
-            chosenItem,
-            options.tableStyles.stylesExclusive
-          );
-        }
-      };
-
-      /* Makes sure the check marks are on the currently applied styles */
-      self.updateTableMenuState = function($dropdownButton) {
-        const rng = context.invoke("createRange", $editable);
-        const dom = $.summernote.dom;
-        if (rng.isCollapsed() && rng.isOnCell()) {
-          var $table = $(dom.ancestor(rng.commonAncestor(), dom.isTable));
-          var $listItems = $dropdownButton.next().find("a");
-          self.updateMenuState(
-            $table,
-            $listItems,
-            options.tableStyles.stylesExclusive
-          );
-        }
-      };
-
-      /* The following functions might be turnkey in other menu lists
-            with exclusive and inclusive items that toggle CSS classes. */
-
-      self.updateMenuState = function($node, $listItems, exclusiveStyles) {
-        var hasAnExclusiveStyle = false;
-        $listItems.each(function() {
-          var cssClass = $(this).data("value");
-          if ($node.hasClass(cssClass)) {
-            $(this).addClass("checked");
-            if ($.inArray(cssClass, exclusiveStyles) != -1) {
-              hasAnExclusiveStyle = true;
-            }
-          } else {
-            $(this).removeClass("checked");
-          }
-        });
-
-        // if none of the exclusive styles are checked, then check a blank
-        if (!hasAnExclusiveStyle) {
-          $listItems.filter('[data-value=""]').addClass("checked");
-        }
-      };
-
-      self.updateStyles = function($node, chosenItem, exclusiveStyles) {
-        var cssClass = $(chosenItem).data("value");
-        context.invoke("beforeCommand");
-        // Exclusive class: only one can be applied at a time
-        if ($.inArray(cssClass, exclusiveStyles) != -1) {
-          $node.removeClass(exclusiveStyles.join(" "));
-          $node.addClass(cssClass);
-        } else {
-          // Inclusive classes: multiple are ok
-          $node.toggleClass(cssClass);
-        }
-        context.invoke("afterCommand");
-      };
-
-      self.generateListItems = function(
-        exclusiveStyles,
-        exclusiveLabels,
-        inclusiveStyles,
-        inclusiveLabels
-      ) {
-        var index = 0;
-        var list = "";
-
-        for (const style of exclusiveStyles) {
-          list += self.getListItem(style, exclusiveLabels[index], true);
-          index++;
-        }
-        list += '<hr style="margin: 5px 0px">';
-        index = 0;
-        for (const style of inclusiveStyles) {
-          list += self.getListItem(style, inclusiveLabels[index], false);
-          index++;
-        }
-        return list;
-      };
-
-      self.getListItem = function(
-        value,
-        label,
-        isExclusive,
-      ) {
-        var item =
-          '<li><a href="#" class="' +
-          (isExclusive ? "exclusive-item" : "inclusive-item") +
-          '" ' +
-          'style="display: block;" data-value="' +
-          value +
-          '">' +
-          '<i class="note-icon-menu-check" ' +
-          (!isExclusive ? 'style="color:#00ffc0;" ' : "") +
-          "></i>" +
-          " " +
-          label +
-          "</a></li>";
-        return item;
+      
+      self.colorPalette = function (className, tooltip, backColor, foreColor) {
+          var _this = this;
+          return ui.buttonGroup({
+              className: 'note-color ' + className,
+              children: [
+                  ui.button({
+                      className: 'note-current-color-button',
+                      contents: ui.icon(options.icons.font + ' note-recent-color'),
+                      tooltip: tooltip,
+                      click: function (e) {
+                          var $button = $(e.currentTarget);
+                          if (backColor && foreColor) {
+                              context.invoke('editor.color', {
+                                  backColor: $button.attr('data-backColor'),
+                                  foreColor: $button.attr('data-foreColor')
+                              });
+                          }
+                          else if (backColor) {
+                              context.invoke('editor.color', {
+                                  backColor: $button.attr('data-backColor')
+                              });
+                          }
+                          else if (foreColor) {
+                             context.invoke('editor.color', {
+                                  foreColor: $button.attr('data-foreColor')
+                              });
+                          }
+                      },
+                      callback: function ($button) {
+                          var $recentColor = $button.find('.note-recent-color');
+                          if (backColor) {
+                              $recentColor.css('background-color', options.colorButton.backColor);
+                              $button.attr('data-backColor', options.colorButton.backColor);
+                          }
+                          if (foreColor) {
+                              $recentColor.css('color', options.colorButton.foreColor);
+                              $button.attr('data-foreColor', options.colorButton.foreColor);
+                          }
+                          else {
+                              $recentColor.css('color', 'transparent');
+                          }
+                      }
+                  }),
+                  ui.button({
+                      className: 'dropdown-toggle',
+                      contents: ui.dropdownButtonContents('', options),
+                      tooltip: lang.color.more,
+                      data: {
+                          toggle: 'dropdown'
+                      }
+                  }),
+                  ui.dropdown({
+                      items: (backColor ? [
+                          '<div class="note-palette">',
+                          '  <div class="note-palette-title">' + lang.color.background + '</div>',
+                          '  <div>',
+                          '    <button type="button" class="note-color-reset btn btn-light" data-event="backColor" data-value="inherit">',
+                          lang.color.transparent,
+                          '    </button>',
+                          '  </div>',
+                          '  <div class="note-holder" data-event="backColor"/>',
+                          '  <div>',
+                          '    <button type="button" class="note-color-select btn" data-event="openPalette" data-value="backColorPicker">',
+                          lang.color.cpSelect,
+                          '    </button>',
+                          '    <input type="color" id="backColorPicker" class="note-btn note-color-select-btn" value="' + options.colorButton.backColor + '" data-event="backColorPalette">',
+                          '  </div>',
+                          '  <div class="note-holder-custom" id="backColorPalette" data-event="backColor"/>',
+                          '</div>',
+                      ].join('') : '') +
+                          (foreColor ? [
+                              '<div class="note-palette">',
+                              '  <div class="note-palette-title">' + lang.color.foreground + '</div>',
+                              '  <div>',
+                              '    <button type="button" class="note-color-reset btn btn-light" data-event="removeFormat" data-value="foreColor">',
+                              lang.color.resetToDefault,
+                              '    </button>',
+                              '  </div>',
+                              '  <div class="note-holder" data-event="foreColor"/>',
+                              '  <div>',
+                              '    <button type="button" class="note-color-select btn" data-event="openPalette" data-value="foreColorPicker">',
+                              lang.color.cpSelect,
+                              '    </button>',
+                              '    <input type="color" id="foreColorPicker" class="note-btn note-color-select-btn" value="' + options.colorButton.foreColor + '" data-event="foreColorPalette">',
+                              '  <div class="note-holder-custom" id="foreColorPalette" data-event="foreColor"/>',
+                              '</div>',
+                          ].join('') : ''),
+                      callback: function ($dropdown) {
+                          $dropdown.find('.note-holder').each(function (idx, item) {
+                              var $holder = $(item);
+                              $holder.append(ui.palette({
+                                  colors: options.colors,
+                                  colorsName: options.colorsName,
+                                  eventName: $holder.data('event'),
+                                  container: options.container,
+                                  tooltip: options.tooltip
+                              }).render());
+                          });
+                          /* TODO: do we have to record recent custom colors within cookies? */
+                          var customColors = [
+                              ['#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF'],
+                          ];
+                          $dropdown.find('.note-holder-custom').each(function (idx, item) {
+                              var $holder = $(item);
+                              $holder.append(ui.palette({
+                                  colors: customColors,
+                                  colorsName: customColors,
+                                  eventName: $holder.data('event'),
+                                  container: options.container,
+                                  tooltip: options.tooltip
+                              }).render());
+                          });
+                          $dropdown.find('input[type=color]').each(function (idx, item) {
+                              $(item).change(function () {
+                                  var $chip = $dropdown.find('#' + $(this).data('event')).find('.note-color-btn').first();
+                                  var color = this.value.toUpperCase();
+                                  $chip.css('background-color', color)
+                                      .attr('aria-label', color)
+                                      .attr('data-value', color)
+                                      .attr('data-original-title', color);
+                                  $chip.click();
+                              });
+                          });
+                      },
+                      click: function (event) {
+                          event.stopPropagation();
+                          var $parent = $('.' + className);
+                          var $button = $(event.target);
+                          var eventName = $button.data('event');
+                          var value = $button.attr('data-value');
+                          if (eventName === 'openPalette') {
+                              var $picker = $parent.find('#' + value);
+                              var $palette = $($parent.find('#' + $picker.data('event')).find('.note-color-row')[0]);
+                              // Shift palette chips
+                              var $chip = $palette.find('.note-color-btn').last().detach();
+                              // Set chip attributes
+                              var color = $picker.val();
+                              $chip.css('background-color', color)
+                                  .attr('aria-label', color)
+                                  .attr('data-value', color)
+                                  .attr('data-original-title', color);
+                              $palette.prepend($chip);
+                              $picker.click();
+                          }
+                          else if (lists.contains(['backColor', 'foreColor'], eventName)) {
+                              var key = eventName === 'backColor' ? 'background-color' : 'color';
+                              var $color = $button.closest('.note-color').find('.note-recent-color');
+                              var $currentButton = $button.closest('.note-color').find('.note-current-color-button');
+                              $color.css(key, value);
+                              $currentButton.attr('data-' + eventName, value);
+                              context.invoke('editor.' + eventName, value);
+                          }
+                      }
+                  }),
+              ]
+          }).render();
       };
     }
   });

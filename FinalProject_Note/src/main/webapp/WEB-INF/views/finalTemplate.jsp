@@ -19,7 +19,8 @@
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="//cdn.ckeditor.com/4.12.1/full/ckeditor.js"></script>
 <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js"></script>
-  <script>tinymce.init({selector:'textarea'});</script>
+<script src="https://cdn.tiny.cloud/1/thfe5r10bknp9pbzrorb1rah5doyys51i6hsjncezu0tpruv/tinymce/5/tinymce.min.js"></script>
+<script src="./resources/js/ko_KR.js"></script>
 <style>
 	.tablebutton{
 		background:lightblue;
@@ -35,37 +36,52 @@
 	<div style="height:100%">
 		<div class="container" style="width:100%; height:100%; padding:none;">
 			<div class="note-Editor" style="width:100%; height:100%; padding:0 15px;">
-				<div class="Editor-Title" style="width:100%;">
-					<div class="Editor" style="width:100%; border:1px solid red">
-						<div class="btn tablebutton" onclick="addTable()" style="cursor:pointer;">표만들기</div>
-						<div class="setTable" style="border:1px solid #000; background:#fff">
-							<div style="border-bottom:1px solid red; ">
-								<div style="">
-								</div>
-								<div>
-								</div>
-								
-							</div>
-							<div style="height:20px">
-							2 X 2
-							</div>
-						</div>
-					</div>
-					<div class="Title" style="width:100%;border:1px solid blue">
-						<input type="text" placeholder="제목 없음" style="font-size:30px;width:100%; height:70px" />
+			<form method="post">
+				<div class="Editor-Title" style="width:100%;height:7.66666%">
+					<div class="Title" style="width:100%;border:1px solid blue;height:100%">
+						<input type="text" placeholder="제목 없음" style="font-size:30px;width:100%; height:100%" />
 					</div>
 				</div>
-				<div style="overflow:auto;height:85%;border:1px solid black">	
-					<textarea name="editor1"></textarea>
-	                <script>
-	                        CKEDITOR.replace( 'editor1' );
-	                </script>
+				<div id="text" style="overflow:auto;height:92.33333%;border:1px solid black">	
+						<textarea><b>테스트입니다.</b></textarea>
 				</div>
-
+			</form>
 			</div>			
 		</div>
 	</div>
-	
+	<script>
+	var height;
+		$(function(){
+			var i = $('#text').css('height');
+			var arr = i.split('p');
+			
+			console.log(arr[0]);
+			height=arr[0]-2;
+			console.log(height);
+			tinymce.init({
+				  selector:'textarea',
+				  language : 'ko_KR',
+				  height: height,
+				  plugins: [
+				    'link image imagetools table code'
+				  ],
+				  menubar:false,
+				  toolbar: 'undo redo | styleselect | fontselect | fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | image code table',
+				  
+					/* without images_upload_url set, Upload tab won't show up*/
+					images_upload_url: 'postAcceptor.php',
+					
+					/* we override default upload handler to simulate successful upload*/
+					images_upload_handler: function (blobInfo, success, failure) {
+					  setTimeout(function () {
+					    /* no matter what you upload, we will turn it into TinyMCE logo :)*/
+					    success('http://moxiecode.cachefly.net/tinymce/v9/images/logo.png');
+					  }, 2000);
+					}
+				  });
+		});
+	  
+	</script>
 	
 	
 </body>

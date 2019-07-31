@@ -8,50 +8,31 @@
 
 <HEAD>
 <TITLE>웹에디터 예제3</TITLE>
-<script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<SCRIPT langauge="javascript">
-function htmledit(excute,values)
-{
-        if(values==null)
-        {
-                dhtmlframe.document.execCommand(excute);
-        }
-        else
-        {
-                dhtmlframe.document.execCommand(excute,"",values);
-        }
-}
-</SCRIPT>
+<script src="https://cdn.tiny.cloud/1/thfe5r10bknp9pbzrorb1rah5doyys51i6hsjncezu0tpruv/tinymce/5/tinymce.min.js"></script>
+<script src="./resources/js/ko_KR.js"></script>
 </HEAD>
-
 <BODY>
-<A href="javascript:htmledit('cut');">자르기</a>
-<A href="javascript:htmledit('copy');">복사</a>
-<A href="javascript:htmledit('paste');">붙여넣기</a>
-<A href="javascript:htmledit('justifyleft');">좌측정렬</a>
-<A href="javascript:htmledit('justifycenter');">중심정렬</a>
-<A href="javascript:htmledit('justifyright');">우측정렬</a>
-<A href="javascript:htmledit('insertorderedlist');">점표시목록</a>
-<A href="javascript:htmledit('insertunorderedlist');">숫자목록</a>
-<A href="javascript:htmledit('outdent');">들여쓰기줄이기</a>
-<A href="javascript:htmledit('indent');">들여쓰기늘이기</a>
-<A href="javascript:htmledit('createlink');">링크</a><BR>
-글꼴 &gt;
-<A href="javascript:htmledit('fontname','굴림');">굴림</a>
-<A href="javascript:htmledit('fontname','궁서');">궁서</a>
-글크기 &gt;
-<A href="javascript:htmledit('fontSize',2);">2</a>
-<A href="javascript:htmledit('fontSize',3);">3</a>
-<A href="javascript:htmledit('fontSize',4);">4</a>
-<A href="javascript:htmledit('bold');">볼드</A>
-<A href="javascript:htmledit('italic');">이탤릭</A>
-<A href="javascript:htmledit('underline');">언더라인</A>
-<P><IFRAME NAME=dhtmlframe></IFRAME>
-
-<SCRIPT LANGUAGE="JavaScript">
-	dhtmlframe.document.designMode = "On"
-
-</SCRIPT> 
+<textarea>텍스트 편집기</textarea>
+<script>
+tinymce.init({
+	selector: 'textarea',
+	height: 600,
+	plugins: 'image code',
+	toolbar: 'undo redo | image code',
+	
+	/* without images_upload_url set, Upload tab won't show up*/
+	images_upload_url: 'postAcceptor.php',
+	
+	/* we override default upload handler to simulate successful upload*/
+	images_upload_handler: function (blobInfo, success, failure) {
+	  setTimeout(function () {
+	    /* no matter what you upload, we will turn it into TinyMCE logo :)*/
+	    success('http://moxiecode.cachefly.net/tinymce/v9/images/logo.png');
+	  }, 2000);
+	}
+	
+});
+</script>
 </BODY>
 
 </HTML>

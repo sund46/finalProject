@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="note">
+	
+	<resultMap id="note" type="note"/> 
+			
+	
+	<insert id="insertNote" parameterType="note">
+		INSERT INTO NOTE VALUES(							
+			SEQ_NNO.NEXTVAL, #{mno}, 1, 1, 
+			#{ntitle}, #{ncontent}, 's1', DEFAULT)	
+	</insert>
+	
+	
+	<select id="selectOneNote" parameterType="_int" resultMap="note"> 
+		SELECT * FROM NOTE WHERE NNO = #{nno}				
+	</select>
+	
+	
+	<select id="selectListNote" parameterType="note" resultType="note">
+		SELECT * FROM NOTE WHERE MNO = #{mno} AND TRASHCAN = #{trashcan}
+	</select>
+		
+	
+	<update id="updateNote" parameterType="note">
+		UPDATE NOTE SET NTITLE = #{ntitle}, NCONTENT = #{ncontent} WHERE NNO = #{nno}
+	</update>
+	
+	
+	<update id="goTrash" parameterType="note">
+		UPDATE NOTE SET TRASHCAN= #{trashcan} WHERE NNO = #{nno}			
+	</update>
+	
+	<update id="goAllTrash" parameterType="note">
+		UPDATE NOTE SET TRASHCAN= #{trashcan} WHERE MNO = #{mno}			
+	</update>
+	
+	 
+	<update id="restoreTrash" parameterType="note">
+		UPDATE NOTE SET TRASHCAN= #{trashcan} WHERE NNO = #{nno}			
+	</update>
+		
+	
+	<delete id="deleteOneTrash" parameterType="_int">
+		DELETE FROM NOTE WHERE NNO = #{nno}
+	</delete>
+	
+	
+	<delete id="deleteAllTrash" parameterType="_int" >
+		DELETE FROM NOTE WHERE MNO = #{mno} AND TRASHCAN = 'Y'			
+	</delete>
+	
+	
+</mapper>

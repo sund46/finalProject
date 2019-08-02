@@ -36,16 +36,19 @@
 	<div style="height:100%">
 		<div class="container" style="width:100%; height:100%; padding:none;">
 			<div class="note-Editor" style="width:100%; height:100%; padding:0 15px;">
-			<form method="post">
-				<div class="Editor-Title" style="width:100%;height:7.66666%">
+			
+				<div style="height:5.33333%">
+					<button class="btn" onclick="insertNote();" style="background:light-blue">저장</button>
+				</div>
+				<div class="Editor-Title" style="width:100%;height:7.33333%">
 					<div class="Title" style="width:100%;border:1px solid blue;height:100%">
-						<input type="text" placeholder="제목 없음" style="font-size:30px;width:100%; height:100%" />
+						<input type="text" id="ntitle" name="ntitle" placeholder="제목 없음" style="font-size:30px;width:100%; height:100%" />
 					</div>
 				</div>
-				<div id="text" style="overflow:auto;height:92.33333%;border:1px solid black">	
+				<div id="text" style="overflow:auto;height:87.33333%;border:1px solid black">	
 						<textarea><b>테스트입니다.</b></textarea>
 				</div>
-			</form>
+
 			</div>			
 		</div>
 	</div>
@@ -81,6 +84,15 @@
 				  });
 		});
 	  
+		function insertNote(){
+			var ncontent = tinyMCE.activeEditor.getContent();
+			var ntitle = $('#ntitle').val();
+			console.log(ncontent);
+			console.log(ntitle);
+			
+			location.href="${pageContext.request.contextPath}/note/insertNote.do?ntitle="+ntitle+"&ncontent="+ncontent;
+		};
+		
 	</script>
 	
 	

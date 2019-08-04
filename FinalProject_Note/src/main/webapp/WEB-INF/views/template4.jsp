@@ -6,38 +6,70 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="https://cdn.tiny.cloud/1/thfe5r10bknp9pbzrorb1rah5doyys51i6hsjncezu0tpruv/tinymce/5/tinymce.min.js"></script>
-  <script src="./resources/js/ko_KR.js"></script>
-  <script>
-  tinymce.init({
-	  selector:'textarea',
-	  language : 'ko_KR',
-	  height: 500,
-	  plugins: [
-	    'link image imagetools table code'
-	  ],
-	  menubar:false,
-	  toolbar: 'undo redo | styleselect | fontselect | fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | image code table',
-	  
-		/* without images_upload_url set, Upload tab won't show up*/
-		images_upload_url: 'postAcceptor.php',
-		
-		/* we override default upload handler to simulate successful upload*/
-		images_upload_handler: function (blobInfo, success, failure) {
-		  setTimeout(function () {
-		    /* no matter what you upload, we will turn it into TinyMCE logo :)*/
-		    success('http://moxiecode.cachefly.net/tinymce/v9/images/logo.png');
-		  }, 2000);
-		}
-	  });
-	  
-	  
-	  </script>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script> 
+<script>
+
+$(function(){
+	tinymce.init({      
+	      selector: 'textarea',  // change this value according to your HTML
+	      auto_focus: 'element1',
+	      toolbar: 'undo redo | imageupload',
+	      setup: function(editor) {
+
+	              // create input and insert in the DOM
+	              var inp = $('<input id="tinymce-uploader" type="file" name="pic" accept="image/*" style="display:none">');
+	              $(editor.getElement()).parent().append(inp);
+
+	              // add the image upload button to the editor toolbar
+	              editor.addButton('imageupload', {
+	                text: 'Add image',  
+	                icon: 'image',
+	                onclick: function(e) { // when toolbar button is clicked, open file select modal
+	                  inp.trigger('click');
+	                }
+	              });
+
+	              // when a file is selected, upload it to the server
+	              inp.on("change", function(e){
+	                uploadFile($(this), editor);
+	              });
+
+
+	            function uploadFile(inp, editor) {
+	              var input = inp.get(0);
+	              var data = new FormData();
+	              data.append('files', input.files[0]);
+
+	              $.ajax({
+	                url: '${pageContext.request.contextPath}/a/images',
+	                type: 'POST',
+	                data: data,
+	                enctype: 'multipart/form-data',
+	                dataType : 'json',
+	                processData: false, // Don't process the files
+	                contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+	                success: function(data, textStatus, jqXHR) {
+	                  editor.insertContent('<img class="content-img" src="${pageContext.request.contextPath}' + data.location + '" data-mce-src="${pageContext.request.contextPath}' + data.location + '" />');
+	                },
+	                error: function(jqXHR, textStatus, errorThrown) {
+	                  if(jqXHR.responseText) {
+	                    errors = JSON.parse(jqXHR.responseText).errors
+	                    alert('Error uploading image: ' + errors.join(", ") + '. Make sure the file is an image and has extension jpg/jpeg/png.');
+	                  }
+	                }
+	              });
+	            }
+	      }
+	    });
+});
+
+
+</script>
 </head>
 <body>
-	<form method="post">
-		<textarea><b>테스트입니다.</b></textarea>
-	</form>
+	
+	<textarea><b>테스트입니다.</b></textarea>
 	<button class="btn" onclick="test()">내용 가져오기</button>
 	<script>
 	function test(){

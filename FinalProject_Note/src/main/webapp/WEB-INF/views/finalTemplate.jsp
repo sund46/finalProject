@@ -52,7 +52,7 @@
 					}
 				  });
 		});
-	  
+	  //https://stackoverflow.com/questions/44694579/how-to-upload-images-in-spring-mvc-from-tinymce-editor
 		/*function insertNote(){
 			var ncontent = tinyMCE.activeEditor.getContent();
 			var ntitle = $('#ntitle').val();

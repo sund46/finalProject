@@ -18,7 +18,7 @@ public class TemplateController {
 	
 	@RequestMapping("/template3.do")
 	public String template3() {
-		return "template3";
+		return "template4";
 	}
 	
 	@RequestMapping("/template4.do")

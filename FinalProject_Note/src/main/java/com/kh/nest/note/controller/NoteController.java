@@ -29,7 +29,7 @@ public class NoteController {
 		
 		if(result>0) System.out.println("저장 성공");
 		else System.out.println("실패");
-		return "index";
+		return "finalTemplate";
 	}
 	
 	@RequestMapping("/note/note.do")

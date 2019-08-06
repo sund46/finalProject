@@ -2,6 +2,9 @@ package com.kh.nest;
 
 import java.io.File;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,19 +17,20 @@ public class TemplateController {
 	
 	@RequestMapping(value = "/a/images", method = RequestMethod.POST)
 	@ResponseBody
-	public String handleTinyMCEUpload(@RequestParam("files") MultipartFile files[]) {
+	public String handleTinyMCEUpload(@RequestParam("files") MultipartFile files[],HttpSession session) {
 	    System.out.println("uploading______________________________________MultipartFile " + files.length);
 	    String filePath = "/resources/uploads/tinyMCE/" + files[0].getOriginalFilename();
-	    String result = uploadFilesFromTinyMCE("tinyMCE", files, false);
+	    String result = uploadFilesFromTinyMCE("tinyMCE", files, false,session);
 	    System.out.println(result);
 	    return "{\"location\":\"" + filePath + "\"}";
 
 	}
 
-	private String uploadFilesFromTinyMCE(String prefix, MultipartFile files[], boolean isMain) {
+	private String uploadFilesFromTinyMCE(String prefix, MultipartFile files[], boolean isMain,HttpSession session) {
+		ServletContext context=session.getServletContext();
 	    System.out.println("uploading______________________________________" + prefix);
 	    try {
-	        String folder = context.getRealPath("/") + "/resources/uploads/" + prefix;
+	        String folder = context.getRealPath("/") + "/resources/uploads/" + prefix+"/";
 	        StringBuffer result = new StringBuffer();
 	        byte[] bytes = null;
 	        result.append("Uploading of File(s) ");
@@ -39,8 +43,11 @@ public class TemplateController {
 
 	                    try {
 	                        File theDir = new File(folder);
+	                        System.out.println("1");
 	                        theDir.mkdir();
+	                        System.out.println("2");
 	                        created = true;
+	                        System.out.println("3");
 	                    } catch (SecurityException se) {
 	                        se.printStackTrace();
 	                    }
@@ -51,6 +58,7 @@ public class TemplateController {
 	                    path = folder + files[i].getOriginalFilename();
 	                    File destination = new File(path);
 	                    System.out.println("--> " + destination);
+	                    System.out.println("파일전송");
 	                    files[i].transferTo(destination);
 	                    result.append(files[i].getOriginalFilename() + " Succsess. ");
 	                } catch (Exception e) {

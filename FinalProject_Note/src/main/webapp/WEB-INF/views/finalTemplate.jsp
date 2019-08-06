@@ -38,49 +38,54 @@
 				    'link image imagetools table code'
 				  ],
 				  menubar:false,
-				  toolbar: 'undo redo styleselect fontselect fontsizeselect bold italic alignleft aligncenter alignright alignjustify image code table',
-				// enable title field in the Image dialog
-				  image_title: true, 
-				  // enable automatic uploads of images represented by blob or data URIs
-				  automatic_uploads: true,
-				  // URL of our upload handler (for more details check: https://www.tinymce.com/docs/configure/file-image-upload/#images_upload_url)
-				  // images_upload_url: 'postAcceptor.php',
-				  // here we add custom filepicker only to Image dialog
-				  file_picker_types: 'image', 
-				  // and here's our custom image picker
-				  file_picker_callback: function(cb, value, meta) {
-				    var input = document.createElement('input');
-				    input.setAttribute('type', 'file');
-				    input.setAttribute('accept', 'image/*');
-				    
-				    // Note: In modern browsers input[type="file"] is functional without 
-				    // even adding it to the DOM, but that might not be the case in some older
-				    // or quirky browsers like IE, so you might want to add it to the DOM
-				    // just in case, and visually hide it. And do not forget do remove it
-				    // once you do not need it anymore.
+				  toolbar: 'undo redo styleselect fontselect fontsizeselect bold italic alignleft aligncenter alignright alignjustify imageupload code table',
+				  setup: function(editor) {
 
-				    input.onchange = function() {
-				      var file = this.files[0];
-				      
-				      var reader = new FileReader();
-				      reader.onload = function () {
-				        // Note: Now we need to register the blob in TinyMCEs image blob
-				        // registry. In the next release this part hopefully won't be
-				        // necessary, as we are looking to handle it internally.
-				        var id = 'blobid' + (new Date()).getTime();
-				        var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
-				        var base64 = reader.result.split(',')[1];
-				        var blobInfo = blobCache.create(id, file, base64);
-				        blobCache.add(blobInfo);
+		              // create input and insert in the DOM
+		              var inp = $('<input id="tinymce-uploader" type="file" name="pic" accept="image/*" style="display:none">');
+		              $(editor.getElement()).parent().append(inp);
 
-				        // call the callback and populate the Title field with the file name
-				        cb(blobInfo.blobUri(), { title: file.name });
-				      };
-				      reader.readAsDataURL(file);
-				    };
-				    
-				    input.click();
-				  }
+		              // add the image upload button to the editor toolbar
+		              editor.ui.registry.addButton('imageupload', { 
+		                icon: 'image',
+		                onAction: function(e) { // when toolbar button is clicked, open file select modal
+		                  inp.trigger('click');
+		                }
+		              });
+
+		              // when a file is selected, upload it to the server
+		              inp.on("change", function(e){
+		                uploadFile($(this), editor);
+		              });
+
+
+		            function uploadFile(inp, editor) {
+		              var input = inp.get(0);
+		              var data = new FormData();
+		              data.append('files', input.files[0]);
+
+		              $.ajax({
+		                url: '${pageContext.request.contextPath}/a/images',
+		                type: 'POST',
+		                data: data,
+		                enctype: 'multipart/form-data',
+		                dataType : 'json',
+		                processData: false, // Don't process the files
+		                contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+		                success: function(data, textStatus, jqXHR) {
+		                  editor.insertContent('<img class="content-img" src="${pageContext.request.contextPath}' + data.location + '" data-mce-src="${pageContext.request.contextPath}' + data.location + '" />');
+		                },
+		                error: function(jqXHR, textStatus, errorThrown) {
+		                  if(jqXHR.responseText) {
+		                    errors = JSON.parse(jqXHR.responseText).errors
+		                    alert('Error uploading image: ' + errors.join(", ") + '. Make sure the file is an image and has extension jpg/jpeg/png.');
+		                  }
+		                }
+		              });
+		            }
+		      }
+					
+			
 				  });
 		});
 	  //https://stackoverflow.com/questions/44694579/how-to-upload-images-in-spring-mvc-from-tinymce-editor
@@ -109,7 +114,7 @@
 <body style="height:100%">
 	<div style="height:100%">
 		<div class="container" style="width:100%; height:100%; padding:none;">
-		<form action="${pageContext.request.contextPath}/note/insertNote.do" style="height:100%" method="post">
+		<form action="${pageContext.request.contextPath}/note/insertNote.do" method="post" style="height:100%">
 			<div>
 				<div style="height:5.33333%;border-bottom:1px solid #ededed;padding:5px 0;" >
 					<div style="width:50%;display:inline-block;float:left">
@@ -143,7 +148,6 @@
 			</form>		
 		</div>
 	</div>
-	
 	
 	
 </body>

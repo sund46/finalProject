@@ -114,7 +114,7 @@
 <body style="height:100%">
 	<div style="height:100%">
 		<div class="container" style="width:100%; height:100%; padding:none;">
-		<form action="${pageContext.request.contextPath}/note/insertNote.do" style="height:100%">
+		<form action="${pageContext.request.contextPath}/note/insertNote.do" method="post" style="height:100%">
 			<div>
 				<div style="height:5.33333%;border-bottom:1px solid #ededed;padding:5px 0;" >
 					<div style="width:50%;display:inline-block;float:left">
@@ -148,7 +148,6 @@
 			</form>		
 		</div>
 	</div>
-	
 	
 	
 </body>

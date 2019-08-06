@@ -42,7 +42,7 @@
 				  setup: function(editor) {
 
 		              // create input and insert in the DOM
-		              var inp = $('<input id="tinymce-uploader" type="file" name="pic" accept="image/*" style="display:none">');
+		              var inp = $('<input id="tinymce-uploader" type="file" name="pic" style="display:none">');
 		              $(editor.getElement()).parent().append(inp);
 
 		              // add the image upload button to the editor toolbar
@@ -73,7 +73,7 @@
 		                processData: false, // Don't process the files
 		                contentType: false, // Set content type to false as jQuery will tell the server its a query string request
 		                success: function(data, textStatus, jqXHR) {
-		                  editor.insertContent('<img class="content-img" src="${pageContext.request.contextPath}' + data.location + '" data-mce-src="${pageContext.request.contextPath}' + data.location + '" />');
+		                  editor.insertContent('<a href="${pageContext.request.contextPath}' + data.location + '" download>다운로드</a>');
 		                },
 		                error: function(jqXHR, textStatus, errorThrown) {
 		                  if(jqXHR.responseText) {

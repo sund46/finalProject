@@ -18,9 +18,10 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 
-
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
 <script src="https://cdn.tiny.cloud/1/thfe5r10bknp9pbzrorb1rah5doyys51i6hsjncezu0tpruv/tinymce/5/tinymce.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/ko_KR.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/download.js"></script>
 <script>
 	var height;
 		$(function(){
@@ -38,10 +39,15 @@
 				    'link image imagetools table code'
 				  ],
 				  menubar:false,
-				  toolbar: 'undo redo styleselect fontselect fontsizeselect bold italic alignleft aligncenter alignright alignjustify imageupload code table',
+				  toolbar: 'undo redo styleselect fontselect fontsizeselect bold italic alignleft aligncenter alignright alignjustify code table imageupload fileupload',
+				  allow_script_urls: true,
+				  content_css:"https://use.fontawesome.com/releases/v5.2.0/css/all.css",
+				  extended_valid_elements: "button[class|id|onclick],script[src|async|defer|type|charset],div,span[*],i[*]",
 				  setup: function(editor) {
-
+					  
 		              // create input and insert in the DOM
+		              var inp2 = $('<input id="tinymce-uploader" type="file" name="pic" style="display:none">');
+		              $(editor.getElement()).parent().append(inp2);
 		              var inp = $('<input id="tinymce-uploader" type="file" name="pic" accept="image/*" style="display:none">');
 		              $(editor.getElement()).parent().append(inp);
 
@@ -52,18 +58,29 @@
 		                  inp.trigger('click');
 		                }
 		              });
-
+		              
+		              editor.ui.registry.addButton('fileupload', { 
+		                icon: 'save',
+		                onAction: function(e) { // when toolbar button is clicked, open file select modal
+		                  inp2.trigger('click');
+		                }
+		              });
+		              
 		              // when a file is selected, upload it to the server
 		              inp.on("change", function(e){
+		                uploadImage($(this), editor);
+		              });
+					  
+		              inp2.on("change", function(e){
 		                uploadFile($(this), editor);
 		              });
-
-
-		            function uploadFile(inp, editor) {
+		              
+		            function uploadImage(inp, editor) {
 		              var input = inp.get(0);
 		              var data = new FormData();
 		              data.append('files', input.files[0]);
-
+		              var scriptLoader = new tinymce.dom.ScriptLoader();
+		              
 		              $.ajax({
 		                url: '${pageContext.request.contextPath}/a/images',
 		                type: 'POST',
@@ -72,8 +89,10 @@
 		                dataType : 'json',
 		                processData: false, // Don't process the files
 		                contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+		                content_css:"",
 		                success: function(data, textStatus, jqXHR) {
 		                  editor.insertContent('<img class="content-img" src="${pageContext.request.contextPath}' + data.location + '" data-mce-src="${pageContext.request.contextPath}' + data.location + '" />');
+		                  
 		                },
 		                error: function(jqXHR, textStatus, errorThrown) {
 		                  if(jqXHR.responseText) {
@@ -83,6 +102,40 @@
 		                }
 		              });
 		            }
+		            
+		            function uploadFile(inp, editor) {
+		              var input = inp.get(0);
+		              var data = new FormData();
+		              data.append('files', input.files[0]);
+		              var scriptLoader = new tinymce.dom.ScriptLoader();
+		              
+		              $.ajax({
+		                url: '${pageContext.request.contextPath}/a/files',
+		                type: 'POST',
+		                data: data,
+		                enctype: 'multipart/form-data',
+		                dataType : 'json',
+		                processData: false, // Don't process the files
+		                contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+		                success: function(data, textStatus, jqXHR) {
+		                	var file=data.location.split('/');
+		                	console.log(file[file.length-1]);
+		                	var fileName=file[file.length-1];
+		                	
+		                  editor.insertContent('<a href="${pageContext.request.contextPath}'+data.location+'" style="color:gray;font-weight:normal;"><i class="far fa-file-archive"></i> '+fileName+' </a>');
+		                  
+		                },
+		                error: function(jqXHR, textStatus, errorThrown) {
+		                  if(jqXHR.responseText) {
+		                    errors = JSON.parse(jqXHR.responseText).errors
+		                    alert('Error uploading image: ' + errors.join(", ") + '. Make sure the file is an image and has extension jpg/jpeg/png.');
+		                  }
+		                }
+		              });
+		            }
+		            
+		            
+		            
 		      }
 					
 			
@@ -97,6 +150,8 @@
 			
 			location.href="${pageContext.request.contextPath}/note/insertNote.do?ntitle="+ntitle+"&ncontent="+ncontent;
 		};*/
+		
+		
 		
 	</script>
 <style>
@@ -143,13 +198,11 @@
 						display:none;
 					}
 				</style>
-				
+
 			</div>	
-			</form>		
+			</form>				
 		</div>
 	</div>
-	
-	
 </body>
 </html>
 

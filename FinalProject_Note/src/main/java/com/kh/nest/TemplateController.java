@@ -19,13 +19,21 @@ public class TemplateController {
 	@ResponseBody
 	public String handleTinyMCEUpload(@RequestParam("files") MultipartFile files[],HttpSession session) {
 	    System.out.println("uploading______________________________________MultipartFile " + files.length);
-	    String filePath = "/resources/uploads/tinyMCE/" + files[0].getOriginalFilename();
-	    String result = uploadFilesFromTinyMCE("tinyMCE", files, false,session);
+	    String filePath = "/resources/uploads/images/" + files[0].getOriginalFilename();
+	    String result = uploadFilesFromTinyMCE("images", files, false,session);
 	    System.out.println(result);
 	    return "{\"location\":\"" + filePath + "\"}";
 
 	}
-
+	@RequestMapping(value = "/a/files", method = RequestMethod.POST)
+	@ResponseBody
+	public String handleTinyMCEUpload2(@RequestParam("files") MultipartFile files[],HttpSession session) {
+	    System.out.println("uploading______________________________________MultipartFile " + files.length);
+	    String filePath = "/resources/uploads/files/" + files[0].getOriginalFilename();
+	    String result = uploadFilesFromTinyMCE("files", files, false,session);
+	    System.out.println(result);
+	    return "{\"location\":\"" + filePath + "\"}";
+	}
 	private String uploadFilesFromTinyMCE(String prefix, MultipartFile files[], boolean isMain,HttpSession session) {
 		ServletContext context=session.getServletContext();
 	    System.out.println("uploading______________________________________" + prefix);

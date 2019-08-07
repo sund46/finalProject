@@ -176,7 +176,7 @@
 						<h4>NoteBook</h2>
 					</div>
 					<div style="width:50%; text-align:right;display:inline-block;">
-						<input type="submit" class="btn" method="post" value="저장하기" style="background:#e8a121;color:#fff;font-weight:500"/>
+						<input type="submit" class="btn" value="저장하기" style="background:#e8a121;color:#fff;font-weight:500"/>
 					</div>
 					
 				</div>

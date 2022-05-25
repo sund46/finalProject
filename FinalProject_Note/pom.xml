@@ -57,7 +57,7 @@
 			<version>${org.aspectj-version}</version>
 		</dependency>	
 		
-		<!-- Proxy �??��?�� ?��?�� CGLIB ?��?��브러�? 추�??���?-->
+		<!-- Proxy ì§??›?„ ?œ„?•œ CGLIB ?¼?´ë¸ŒëŸ¬ë¦? ì¶”ê??•˜ê¸?-->
 		<dependency>
 			<groupId>cglib</groupId>
 			<artifactId>cglib</artifactId>
@@ -154,23 +154,23 @@
 			<version>1.4</version>
 		</dependency>
 		
-		<!-- Mybatis Spring ?��?�� lib -->
+		<!-- Mybatis Spring ?—°?™ lib -->
 		
-		<!-- 마이바티?��?�� ?��?���? ?��결해주는 lib -->
+		<!-- ë§ˆì´ë°”í‹°?Š¤?ž‘ ?Š¤?”„ë§? ?—°ê²°í•´ì£¼ëŠ” lib -->
 		<dependency>
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis-spring</artifactId>
 			<version>2.0.0</version>
 		</dependency>
 		
-		<!-- 마이바티?�� 본체(3.5.1)-->
+		<!-- ë§ˆì´ë°”í‹°?Š¤ ë³¸ì²´(3.5.1)-->
 		<dependency>
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis</artifactId>
 			<version>3.5.1</version>
 		</dependency>
 			
-		<!-- ?��?���? jdbc -->
+		<!-- ?Š¤?”„ë§? jdbc -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
@@ -182,7 +182,7 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
 			 <!--  <version>${org.springframework-version}</version>  -->
-			<version>4.2.6.RELEASE</version>
+			<version>5.5.7</version>
 		</dependency>
 		
 		<dependency>
